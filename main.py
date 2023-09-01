@@ -9,12 +9,14 @@ class lxgh:
     def __init__(self):
         pass
 
+
+    #获取坐标
     @staticmethod
-    def get_loc(addr1):
+    def get_loc(addr):#addr->地名
         parameters = {
             #             'key': '73b8604da9e3019fa8334d0815532879',  # 高德Key
             'key': '74ed60f0267e195ede2bad10c9619c21',  # 高德Key
-            'address': addr1,
+            'address': addr,
             # 'destination': addr2,
         }  # 地址参数
 
@@ -23,14 +25,12 @@ class lxgh:
         result = result.json()
         # print(result['geocodes'][0]['location'])
         return result['geocodes'][0]['location']
+
+    #获取距离
     @staticmethod
-    def place_distance(addr,des_name = '长春市宽城柳影实验学校'):
+    def place_distance(addr,des_name = '长春市宽城柳影实验学校'):#addr->起点（地名），des_name->终点
         des = lxgh.get_loc(des_name)
-        """
-        :param addr1:起始点
-        :param addr2: 终止点
-        :return: 两点距离
-        """
+
         parameters = {
 #             'key': '73b8604da9e3019fa8334d0815532879',  # 高德Key
              'key': '74ed60f0267e195ede2bad10c9619c21',  # 高德Key
@@ -47,11 +47,15 @@ class lxgh:
         # print(lon_lat)
         return lon_lat
 
+    #返回[{地名：位置坐标}, ...]
     @staticmethod
     def loc_name_loci(addr_list):
-        loc = lambda x: [{i:lxgh.get_loc(i)} for i in x]
+        loc = lambda x: {i:lxgh.get_loc(i) for i in x}
         all_loc = loc(addr_list)
         return all_loc
+
+
+
 if __name__ == '__main__':
     path = '/Users/liufucong/Desktop/环线公交 副本/柳影实验学校公交信息采集.xlsx'
     loc_name = load_gt(path)
