@@ -40,7 +40,8 @@ for i in list_1:
 print(list_0)
 
 
-n_clusters= 3
+n_clusters= 5
+
 cluster = KMeans(n_clusters=n_clusters,random_state=0).fit(list_0)
 
 
@@ -54,7 +55,7 @@ for i in list_0:
 
 df['mapbar'],df['centroid'],df['normalize']=[list_1,y_pred,list_3]
 
-path = './柳影实验学校公交信息采集_分类后数据.xlsx'
+path = './柳影实验学校公交信息采集_分类后数据_'+str(n_clusters)+'.xlsx'
 lxgh.dict_csv(df,path)
 
 

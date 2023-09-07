@@ -25,17 +25,21 @@ def get_loc_2(addr):  # addr->地名
         # print(result['geocodes'][0]['location'])
         return result['geocodes'][0]['location']
 
+#
+# path_1 = '柳影实验学校'
+# path_2 = '豪邦四季经典'
+#
+# liuying = lxgh.get_loc('长春市宽城区柳影路1602号')
+# print(liuying)
+#
+# # p1 = lxgh.get_loc(path_2)
+# p2 = lxgh.place_distance(path_2,'长春市宽城区柳影路1602号')
+# print(p2)
+#
+#
+# p3 = get_loc_2(p2[0])
+# p4 = get_loc_2(liuying)
 
-path_1 = '柳影实验学校'
-path_2 = '豪邦四季经典'
 
-liuying = lxgh.get_loc('长春市宽城区柳影路1602号')
-print(liuying)
-
-# p1 = lxgh.get_loc(path_2)
-p2 = lxgh.place_distance(path_2,'长春市宽城区柳影路1602号')
-print(p2)
-
-
-p3 = get_loc_2(p2[0])
-p4 = get_loc_2(liuying)
+import uuid
+print(uuid.uuid1())
