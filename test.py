@@ -1,3 +1,5 @@
+import os
+
 from main import *
 
 
@@ -43,3 +45,5 @@ def get_loc_2(addr):  # addr->地名
 
 import uuid
 print(uuid.uuid1())
+
+print(os.path.dirname(os.getcwd()))
