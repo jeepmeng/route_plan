@@ -5,6 +5,7 @@ import itertools
 from load_gt_data import load_gt
 # from utils import dict_csv
 import os
+from utils import *
 
 class lxgh:
     def __init__(self):
@@ -135,8 +136,9 @@ class lxgh:
 
 if __name__ == '__main__':
     path = '/Users/liufucong/Desktop/环线公交 副本/柳影实验学校公交信息采集.xlsx'
-    loc_name = load_gt(path)
-    print(loc_name[:10])
-    ff = lxgh.loc_name_loci(loc_name)
-    print(ff)
-    lxgh.dict_csv(ff,path)
+    # loc_name = load_gt(path)
+    # print(loc_name[:10])
+    # ff = lxgh.loc_name_loci(loc_name)
+    # print(ff)
+    # lxgh.dict_csv(ff,path)
+    test = clu(3,'长春市宽城区柳影路1602号',path)
