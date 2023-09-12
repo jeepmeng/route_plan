@@ -63,7 +63,7 @@ def loc_name_loci(addr_list,des):
 
 
 #路径分解
-def path_refactor(path,second=False):#path="csv数据路径"，second="选择分类或拆分"
+def path_refactor(path,second=False, specify_file=None):#path="csv数据路径"，second="选择分类或拆分"
     #example
     #path = '/Users/liufucong/Desktop/环线公交 副本/长盛小学公交信息采集.xls'
     tail_text = (os.path.split(path)[1]).split('.')[0]
@@ -72,12 +72,22 @@ def path_refactor(path,second=False):#path="csv数据路径"，second="选择分
     # if not os.path.exists(exit_folder):
     #     # os.mkdir(exit_folder)
     #     print('New folder.........(   {}   ).......has made!'.format(exit_folder))
-    if second:
-        tail_text = tail_text+'_拆分后.csv'
-        return os.path.join(os.path.split(path)[0],tail_text)
+    if specify_file:
+        if second:
+            # head = specify_file
+            tail_text = tail_text+'_拆分后.csv'
+            return os.path.join(specify_file,tail_text)
+        else:
+            tail_text = tail_text+'_分类后.csv'
+            return os.path.join(specify_file,tail_text)
+
     else:
-        tail_text = tail_text+'_分类后.csv'
-        return os.path.join(os.path.split(path)[0],tail_text)
+        if second:
+            tail_text = tail_text+'_拆分后.csv'
+            return os.path.join(os.path.split(path)[0],tail_text)
+        else:
+            tail_text = tail_text+'_分类后.csv'
+            return os.path.join(os.path.split(path)[0],tail_text)
 
 
 #高德坐标转换，转mapbar
@@ -194,7 +204,77 @@ class clu():
     def normalize(self,loc):
         x_y_norm = float(loc.split(',')[0]) - self.x_normal, float(loc.split(',')[1]) - self.y_normal
         return x_y_norm
+class clu_unnorm():
+    def __init__(self,destination,path,n_cluster=3,radius=1.5, specify_file = None):
+        self.destination = destination
+        self.specify_file = None
+        self.n_cluster = n_cluster
+        self.y_pred = []
+        # self.center_co = coor_convert(get_loc(destination))
+        # self.center_co = coor_convert(self.destination)
 
+        self.path = path
+        self.radius = radius
+        # self.df = load_gt(path)
+        # dict_csv()
+        self.df = pd.read_csv(self.path)
+
+        # self.list_co_convert = []
+        self.x_normal,self.y_normal = float(self.destination.split(',')[0]),float(self.destination.split(',')[-1])
+        self.list_co_convert = []
+        self.list_co_normal = []
+        self.co_convert()
+        self.convert_str = []
+        self.save_path_cluster = ''
+        # self.cluster(n_cluster)
+        # self.final_split()
+
+    #聚类
+    # @staticmethod
+    def cluster(self):
+        # cluster = KMeans(n_clusters=self.n_cluster, random_state=0).fit(self.list_co_convert)
+        cluster = KMeans(n_clusters=self.n_cluster, random_state=0)
+        cluster.fit(self.list_co_normal)
+        y_pred = cluster.labels_
+        print(y_pred)
+
+        for i in self.list_co_normal:
+            self.convert_str.append(str(i[0]) + ',' + str(i[-1]))
+        self.df['centroid'], self.df['normalize'] = [y_pred,
+                                                     self.convert_str]
+        self.save_path_cluster = path_refactor(self.path,self.specify_file)
+        dict_to_csv(self.df, self.save_path_cluster)
+    #csv数据分列
+    def final_split(self):
+        df = pd.read_csv(self.save_path_cluster)
+        # print(df.loc)
+
+        df_id = df.id.to_frame()
+        # print(df_id)
+
+        df_id['loc_x'], df_id['loc_y'], df_id['dis'], df_id['centroid'], df_id['normalize_x'], df_id['normalize_y'] = [
+            df['loc'].apply(lambda x: x.split(',')[0]),
+            df['loc'].apply(lambda x: x.split(',')[-1]),
+            df['dis'],
+            df['centroid'],
+            df['normalize'].apply(lambda x: x.split(',')[0]),
+            df['normalize'].apply(lambda x: x.split(',')[-1])]
+        save_path_split = path_refactor(self.path,True)
+        dict_to_csv(df_id, save_path_split)
+
+    def co_convert(self):
+        ll = np.array(self.df['dis'])
+        # np.mean(ll)
+        self.df = self.df[self.df['dis'] <= np.mean(ll)*self.radius]
+
+        for i in self.df['loc'].tolist():
+            # self.list_co_convert.append(coor_convert(i)['locations'])
+            self.list_co_normal.append(self.normalize(i))
+
+    # @staticmethod
+    def normalize(self,loc):
+        x_y_norm = float(loc.split(',')[0]) - self.x_normal, float(loc.split(',')[1]) - self.y_normal
+        return x_y_norm
 
 #读取csv
 def load_csv(path, index=False, condition=False):

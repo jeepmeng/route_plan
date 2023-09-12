@@ -16,7 +16,7 @@ with open('./school_location.json','r') as f:
 id = content['长盛小学公交信息采集.xls']['location']
 print(id)
 
-test = clu(destination=id, path= '/Users/liufucong/Downloads/route_plan/data/长盛小学公交信息采集/长盛小学公交信息采集.csv')
+test = clu_unnorm (destination=id, path= '/Users/liufucong/Downloads/route_plan/test/长盛小学公交信息采集.csv', specify_file='/Users/liufucong/Downloads/route_plan/test',radius=1.7)
 test.cluster()
 test.final_split()
 

@@ -9,7 +9,7 @@ plt.rcParams['figure.dpi'] = 75  # 图形分辨率
 sns.set_theme(style='darkgrid')  # 图形主题
 
 
-path = '/Users/liufucong/Downloads/route_plan/data/长盛小学公交信息采集/长盛小学公交信息采集_拆分后.csv'
+path = '/Users/liufucong/Downloads/route_plan/test/长盛小学公交信息采集_拆分后.csv'
 df = pd.read_csv(path)
 
 # df = df[df['normalize_x']<0.06]

@@ -1,7 +1,7 @@
 import os
-
-from main import *
-
+import numpy as np
+# from main import *
+import pandas as pd
 
 def get_loc_2(addr):  # addr->地名
     parameters = {
@@ -43,7 +43,15 @@ def get_loc_2(addr):  # addr->地名
 # p4 = get_loc_2(liuying)
 
 
-import uuid
-print(uuid.uuid1())
+# import uuid
+# print(uuid.uuid1())
+#
+# print(os.path.dirname(os.getcwd()))
 
-print(os.path.dirname(os.getcwd()))
+path = '/Users/liufucong/Downloads/route_plan/test/长盛小学公交信息采集_分类后.csv'
+df = pd.read_csv(path)
+ll= np.array(df['dis'])
+print(np.mean(ll))
+print(np.max(ll))
+df = df[df['dis']<=np.mean(ll)*1.5]
+print(df)
