@@ -28,6 +28,8 @@ def seb_cluster():
     with open('./school_location.json', 'r') as f:
         content = f.read()
         content = json.loads(content)
+
+
     loc = content['长盛小学公交信息采集.xls']['location']
     print(loc)
     loc_0 = float((utils.coor_convert(loc)['locations']).split(',')[0])

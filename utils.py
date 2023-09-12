@@ -7,7 +7,7 @@ from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
 import seaborn as sns
 import requests
-import load_gt_data as l_d
+# import load_gt_data as l_d
 
 
 def place_distance(addr_id,des_loc='',des_name=''):#addr->起点（地名），des_name->终点
@@ -226,30 +226,41 @@ def dict_to_csv(dict, path):
 #保存csv文件
 class dict_csv():
 
-    def __init__(self,path,des):
+    def __init__(self,path,des,specify_file=None):
+        self.specify_file = specify_file
         self.path = path
         self.des = des
         self.tail_text = (os.path.split(self.path)[1]).split('.')[0]
         self.file_name = (os.path.split(path)[-1]).split('.')[0] + '.csv'
         self.exist_folder = os.path.join(os.getcwd(),'data')
 
+        if self.specify_file:
+            # self.path = specify_file
+            # self.exist_folder = specify_file
+            # self.exist_file = os.path.join(self.specify_file, self.tail_text)
+            # print(self.exist_file)
+            self.save_path = os.path.join(self.specify_file, self.file_name)
 
-        if not os.path.exists(self.exist_folder):
-            os.mkdir(self.exist_folder)
-            print('New folder.........(   {}   ).......has made!'.format(self.exist_folder))
+            self.save_dict()
 
 
-        self.exist_file = os.path.join(self.exist_folder, self.tail_text)
-        # print(self.exist_file)
-        self.save_path = os.path.join(self.exist_file,self.file_name)
-
-
-        if not os.path.exists(self.exist_file):
-            os.mkdir(self.exist_file)
-            print('New folder.........(   {}   ).......has made!'.format(self.exist_file))
         else:
-            print('Folder........ {} .........already exist!'.format(self.exist_file))
-        self.save_dict()
+            if not os.path.exists(self.exist_folder):
+                os.mkdir(self.exist_folder)
+                print('New folder.........(   {}   ).......has made!'.format(self.exist_folder))
+
+
+            self.exist_file = os.path.join(self.exist_folder, self.tail_text)
+            # print(self.exist_file)
+            self.save_path = os.path.join(self.exist_file,self.file_name)
+
+
+            if not os.path.exists(self.exist_file):
+                os.mkdir(self.exist_file)
+                print('New folder.........(   {}   ).......has made!'.format(self.exist_file))
+            else:
+                print('Folder........ {} .........already exist!'.format(self.exist_file))
+            self.save_dict()
         # if not os.path.exists(self.save_path):
         #     self.save_dict()
         # else:
@@ -259,7 +270,7 @@ class dict_csv():
         data = load_gt(self.path)
         ff = loc_name_loci(data,self.des)
         # kk = pd.DataFrame.from_dict(dict)
-        pd.DataFrame.from_dict(data=ff).to_csv(os.path.join(self.save_path), header=True)
+        pd.DataFrame.from_dict(data=ff).to_csv(self.save_path, header=True)
         print('{}------- already saved at --------{}'.format(self.file_name, self.path))
 
 
