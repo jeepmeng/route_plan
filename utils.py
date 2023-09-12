@@ -67,17 +67,17 @@ def path_refactor(path,second=False):#path="csv数据路径"，second="选择分
     #example
     #path = '/Users/liufucong/Desktop/环线公交 副本/长盛小学公交信息采集.xls'
     tail_text = (os.path.split(path)[1]).split('.')[0]
-    exit_folder = os.path.join(os.getcwd(),tail_text)
+    # exit_folder = os.path.join(os.getcwd(),tail_text)
 
-    if not os.path.exists(exit_folder):
-        os.mkdir(exit_folder)
-        print('New folder.........(   {}   ).......has made!'.format(exit_folder))
+    # if not os.path.exists(exit_folder):
+    #     # os.mkdir(exit_folder)
+    #     print('New folder.........(   {}   ).......has made!'.format(exit_folder))
     if second:
         tail_text = tail_text+'_拆分后.csv'
-        return tail_text, os.path.join(exit_folder,tail_text)
+        return os.path.join(os.path.split(path)[0],tail_text)
     else:
         tail_text = tail_text+'_分类后.csv'
-        return tail_text, os.path.join(exit_folder,tail_text)
+        return os.path.join(os.path.split(path)[0],tail_text)
 
 
 #高德坐标转换，转mapbar
@@ -124,6 +124,8 @@ def get_loc(addr):  # addr->地名
 class clu():
     def __init__(self,destination,path,n_cluster=3,radius=10000):
         self.destination = destination
+        self.n_cluster = n_cluster
+        self.y_pred = []
         # self.center_co = coor_convert(get_loc(destination))
         self.center_co = coor_convert(self.destination)
 
@@ -136,25 +138,29 @@ class clu():
         # self.list_co_convert = []
         self.x_normal,self.y_normal = float(self.center_co['locations'].split(',')[0]),float(self.center_co['locations'].split(',')[-1])
         self.list_co_convert = []
+        self.list_co_normal = []
         self.co_convert()
         self.convert_str = []
         self.save_path_cluster = ''
-        self.cluster(n_cluster)
+        # self.cluster(n_cluster)
         # self.final_split()
 
     #聚类
     # @staticmethod
-    def cluster(self,n_clusters):
-        cluster = KMeans(n_clusters=n_clusters, random_state=0).fit(self.list_co_convert)
-        y_pred = cluster.label_
+    def cluster(self):
+        # cluster = KMeans(n_clusters=self.n_cluster, random_state=0).fit(self.list_co_convert)
+        cluster = KMeans(n_clusters=self.n_cluster, random_state=0)
+        cluster.fit(self.list_co_normal)
+        y_pred = cluster.labels_
+        print(y_pred)
 
-        for i in self.list_co_convert:
+        for i in self.list_co_normal:
             self.convert_str.append(str(i[0]) + ',' + str(i[-1]))
         self.df['mapbar'], self.df['centroid'], self.df['normalize'] = [self.list_co_convert,
                                                                         y_pred,
-                                                                        self.list_co_convert]
-        save_name_cluster, self.save_path_cluster = path_refactor(self.path)
-        dict_csv(self.df, save_name_cluster, self.save_path_cluster)
+                                                                        self.convert_str]
+        self.save_path_cluster = path_refactor(self.path)
+        dict_to_csv(self.df, self.save_path_cluster)
     #csv数据分列
     def final_split(self):
         df = pd.read_csv(self.save_path_cluster)
@@ -173,15 +179,16 @@ class clu():
             df['centroid'],
             df['normalize'].apply(lambda x: x.split(',')[0]),
             df['normalize'].apply(lambda x: x.split(',')[-1])]
-        save_name_split,save_path_split = path_refactor(self.path,True)
-        dict_csv(df_id, save_name_split, save_path_split)
+        save_path_split = path_refactor(self.path,True)
+        dict_to_csv(df_id, save_path_split)
 
     def co_convert(self):
 
         self.df = self.df[self.df['dis'] <= self.radius]
 
         for i in self.df['loc'].tolist():
-            self.list_co_convert.append(self.normalize(coor_convert(i)['locations']))
+            self.list_co_convert.append(coor_convert(i)['locations'])
+            self.list_co_normal.append(self.normalize(coor_convert(i)['locations']))
 
     # @staticmethod
     def normalize(self,loc):
@@ -199,6 +206,22 @@ def load_csv(path, index=False, condition=False):
         return df[index]
     else:
         return df
+
+
+def dict_to_csv(dict, path):
+    # mydict = {'key1': 'a', 'key2': 'b', 'key3': 'c'}
+    #     path = '/Users/liufucong/Desktop/环线公交/47中学公交信息采集.xlsx'
+    # file_name = (os.path.split(path)[-1]).split('.')[0] + '.csv'
+    # cwd = os.getcwd()
+    # save_path = os.path.join(cwd, file_name)
+    # pd.DataFrame.from_dict(data=dict, orient='index',columns=['geo']).to_csv(save_path, header=False)
+    # kk = pd.DataFrame.from_dict(dict, orient='index',columns=['geo','dis'])
+    kk = pd.DataFrame.from_dict(dict)
+    # print(kk)
+    kk.to_csv(path, header=True)
+    print('分类后.csv------- already saveed at --------{}'.format(path))
+
+
 
 #保存csv文件
 class dict_csv():
@@ -233,18 +256,28 @@ class dict_csv():
         #     pass
 
     def save_dict(self):
-        data = l_d.load_gt(self.path)
+        data = load_gt(self.path)
         ff = loc_name_loci(data,self.des)
         # kk = pd.DataFrame.from_dict(dict)
         pd.DataFrame.from_dict(data=ff).to_csv(os.path.join(self.save_path), header=True)
         print('{}------- already saved at --------{}'.format(self.file_name, self.path))
 
 
+def load_gt(path,colums='Unnamed: 3',head=2):
+
+    df = pd.read_excel(io=path)
+    tt = df[colums][head:].values.tolist()
+
+    return tt
+
 
 if __name__ == '__main__':
-
-    path = '/Users/liufucong/Desktop/环线公交 副本'
-    i = '柳影中学公交信息采集.xlsx'
+    path = '/Users/liufucong/Downloads/route_plan/data/柳影中学公交信息采集/柳影中学公交信息采集.csv'
+    a,b = path_refactor(path)
+    print(a)
+    print(b)
+    # path = '/Users/liufucong/Desktop/环线公交 副本'
+    # i = '柳影中学公交信息采集.xlsx'
     # with open('./school_location.json','r') as f:
     #     content = f.read()
     #     content = json.loads(content)
@@ -255,17 +288,6 @@ if __name__ == '__main__':
     #     claster_test = clu(destination=des,path = os.path.join(path,i[0]))
     #     dict_csv()
 
-    # for
-    dict_csv(os.path.join(path, i))
-    # print(test.save_path)
-
-
-
-    # i = '柳影中学公交信息采集.xlsx'
-    # print(os.path.join(path, i))
-    # df = pd.read_csv(os.path.join(path, i))
-    # print(df)
-    # claster_test = clu(destination="125.307175,43.937016", path=os.path.join(path, i))
 
 
 
