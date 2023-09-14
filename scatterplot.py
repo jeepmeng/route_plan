@@ -9,7 +9,7 @@ plt.rcParams['figure.dpi'] = 75  # 图形分辨率
 sns.set_theme(style='darkgrid')  # 图形主题
 
 
-path = '/Users/liufucong/Downloads/route_plan/test/长盛小学公交信息采集_拆分后.csv'
+path = '/Users/liufucong/Downloads/route_plan/test/长盛小学公交信息采集_拆分后_1.5.csv'
 df = pd.read_csv(path)
 
 # df = df[df['normalize_x']<0.06]
@@ -19,7 +19,7 @@ print(df)
 
 
 sns.scatterplot(data=df,x='normalize_x',y='normalize_y',hue='centroid')
-save_pth = (os.path.split(path)[1]).split('.')[0]+'_3.png'
+save_pth = (os.path.split(path)[1]).split('.')[0]+'_1.5.png'
 cwd = os.path.split(path)[0]
 print(os.path.join(save_pth,cwd))
 plt.savefig(os.path.join(cwd,save_pth))
