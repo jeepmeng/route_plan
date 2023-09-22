@@ -37,7 +37,7 @@ def seb_cluster():
     loc_1 = float((utils.coor_convert(loc)['locations']).split(',')[1])
     list_1.append(loc_1)
     print(list_1)
-    path = '/Users/liufucong/Downloads/route_plan/data/长盛小学公交信息采集/长盛小学公交信息采集_拆分后_分簇_2.csv'
+    path = '/Users/liufucong/Downloads/route_plan/test/长盛小学公交信息采集_拆分后_1.7.csv'
     df = pd.read_csv(path)
     # df['normalize_x','normalize_y']
 

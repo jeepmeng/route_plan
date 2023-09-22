@@ -10,7 +10,7 @@ import requests
 # import load_gt_data as l_d
 
 
-def place_distance(addr_id,des_loc='',des_name=''):#addr->起点（地名），des_name->终点
+def place_distance(addr_id,des_loc='',des_name=''):#addr_id->起点（地名），des_name->终点
     addr = get_loc(addr_id)
     if des_loc:
         des = des_loc
