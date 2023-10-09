@@ -1,6 +1,22 @@
 # import pymysql
 from pysql import *
+import pandas as pd
+import json
 
+
+
+
+path = '/Users/liufucong/Desktop/环线公交 副本'
+# i = '柳影中学公交信息采集.xlsx'
+with open('../school_location.json', 'r') as f:
+    content = f.read()
+    content = json.loads(content)
+
+# print(content['47中学公交信息采集.xlsx']['location'])
+
+
+
+# print(gengx)
 
 databases_params = {
     'db_host': "172.16.19.103",# 数据库主机地址
@@ -15,9 +31,11 @@ print(connection)
 
 cursor = connection.cursor()
 
-sql = '''ALTER TABLE 47中学公交信息 ADD COLUMN des_location VARCHAR(255) DEFAULT NULL COMMENT '目的地' AFTER dis;'''
-
+# sql = '''ALTER TABLE 47中学公交信息 ADD COLUMN des_location VARCHAR(255) DEFAULT NULL COMMENT '目的地' AFTER dis;'''
+sql = '''UPDATA 47中学公交信息 SET des_location=%s;'''%content['47中学公交信息采集.xlsx']['location']
 
 cursor.execute(sql)
 
 connection.close()
+
+
