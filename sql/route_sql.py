@@ -30,12 +30,19 @@ connection = connect_to_database(databases_params)
 print(connection)
 
 cursor = connection.cursor()
-
+context = content['47中学公交信息采集.xlsx']['location']
+# context='125.337750,43.928402'
+print(context)
 # sql = '''ALTER TABLE 47中学公交信息 ADD COLUMN des_location VARCHAR(255) DEFAULT NULL COMMENT '目的地' AFTER dis;'''
-sql = '''UPDATA 47中学公交信息 SET des_location=%s;'''%content['47中学公交信息采集.xlsx']['location']
+# sql = f'UPDATE 47中学公交信息 SET des_location={context}
 
+sql  = f"UPDATE 47中学公交信息 SET des_location= '{context}' where des_location= '{context}'"
+
+# UPDATE 47中学公交信息 SET des_location= 'nihao'
 cursor.execute(sql)
-
+connection.commit()
 connection.close()
 
 
+# a = '''{}'''.format(context)
+# print(a)
