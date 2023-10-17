@@ -2,7 +2,7 @@ from pysql import *
 import pandas as pd
 import json
 
-def test_connect():
+def new_route_connect():
     databases_params = {
         'db_host': "1.tcp.vip.cpolar.cn",# 数据库主机地址
         "port" :21238, #
@@ -15,6 +15,19 @@ def test_connect():
     print(connection)
     return connection
 
+
+def route_plan_connect():
+    databases_params = {
+        'db_host': "1.tcp.vip.cpolar.cn",# 数据库主机地址
+        "port" :21238, #
+        'db_username': "root",
+        'db_password': "jeepmeng2",
+        'db_name': "route_data"}
+
+
+    connection = connect_to_database(databases_params)
+    print(connection)
+    return connection
 
 def load_json(file_name):
     with open(file_name, 'r', encoding='utf-8') as json_file:
