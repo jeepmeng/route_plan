@@ -39,7 +39,7 @@ def seb_cluster():
     print(list_1)
     path = '/Users/liufucong/Downloads/route_plan/test/长盛小学公交信息采集_拆分后_1.7.csv'
     df = pd.read_csv(path)
-    # df['normalize_x','normalize_y']
+    print(df[['normalize_x','normalize_y']])
 
 
 
@@ -50,7 +50,7 @@ def seb_cluster():
     print(y_pred)
     print(type(centtrod))
     print(centtrod+np.array(list_1))
-
-
+#
+#
 if __name__ == '__main__':
     seb_cluster()

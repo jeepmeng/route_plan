@@ -17,4 +17,4 @@ def st_distance(point_a, point_b):
 
 if __name__ == '__main__':
 
-    print(st_distance([125.338530, 43.947330], [125.328812, 43.923599]))
+    print(st_distance([125.338530, 43.947330], [125.338530, 43.944330]))

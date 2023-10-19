@@ -1,4 +1,4 @@
-from .pysql import *
+from pysql import *
 import pandas as pd
 import json
 
