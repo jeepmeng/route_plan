@@ -50,6 +50,7 @@ def best_map_speed(start,*args,strategy=0,end=['125.325504,43.928104']):
     url = 'https://restapi.amap.com/v3/direction/driving?'  # 高德地图地理编码API服务地址
     result = requests.get(url, parameters)  # GET方式请求
     result = result.json()
+    print(result)
     lon_lat = result["route"]["paths"][0]["distance"]
     # print(result)
     time=0
@@ -83,7 +84,19 @@ with open('route_25.json', 'w') as f:
         temp = permutation(listss,5)
         # print(temp)
         for i_i in temp:
-            tianwei,time = best_map_speed(i,i_i)
+            temp_wey_points=''
+            temp_wey_points_len = len(i_i)
+            for enu,wp in enumerate(i_i):
+                if enu<temp_wey_points_len-1:
+                    temp_wey_points = temp_wey_points+str(wp)+';'
+                elif enu==temp_wey_points_len-1:
+                    temp_wey_points = temp_wey_points+str(wp)
+            print(temp_wey_points)
+
+
+
+
+            tianwei,time = best_map_speed(i,[temp_wey_points])
 
             key = new_dict[i]+str(get_list_name(i_i))
             distance = tianwei
@@ -91,12 +104,7 @@ with open('route_25.json', 'w') as f:
             temp_dict[key] = {"distance":distance,'time':time}
             hh = json.dumps(temp_dict, indent=3, ensure_ascii=False)
             f.write(hh)
-            # ll.append(temp_dict)
-
-            # ll[key].append('distance':distance)
-            # dict[key]
-            # print(temp_dict)
-            # print(str(i)+'---'+str(i_i))
+            print(temp_dict)
 
 
 # hh = json.dumps(ll, indent=3, ensure_ascii=False)
