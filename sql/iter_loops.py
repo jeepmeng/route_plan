@@ -2,7 +2,7 @@ import itertools
 import json
 import requests
 import copy
-import utils
+# import utils
 
 
 
@@ -66,37 +66,42 @@ def permutation(li,num):
     return list(itertools.permutations(li,num ))
 
 
-ll = dict()
-for k,i in enumerate(content):
-    listss = copy.deepcopy(content)
-    # print(k)
-    # print(i)
-    # kk = content
-    listss.pop(k)
-    # print(listss)
-
-    # lists1 = [1, 2, 3, 4]
-    # listss = copy.deepcopy(lists1)
-    # listss.pop(0)
-    # lists1
-    temp = permutation(listss,5)
-    # print(temp)
-    for i_i in temp:
-        tianwei,time = best_map_speed(i,i_i)
-
-        key = new_dict[i]+str(get_list_name(i_i))
-        distance = tianwei
-        temp_dict = {"distance":distance,'time':time}
-        ll[key]=temp_dict
-        # ll[key].append('distance':distance)
-        # dict[key]
-        # print(temp_dict)
-        # print(str(i)+'---'+str(i_i))
-
-
-hh = json.dumps(ll, indent=3, ensure_ascii=False)
+ll = []
 with open('route_25.json', 'w') as f:
-    f.write(hh)
+    for k,i in enumerate(content):
+        listss = copy.deepcopy(content)
+        # print(k)
+        # print(i)
+        # kk = content
+        listss.pop(k)
+        # print(listss)
+
+        # lists1 = [1, 2, 3, 4]
+        # listss = copy.deepcopy(lists1)
+        # listss.pop(0)
+        # lists1
+        temp = permutation(listss,5)
+        # print(temp)
+        for i_i in temp:
+            tianwei,time = best_map_speed(i,i_i)
+
+            key = new_dict[i]+str(get_list_name(i_i))
+            distance = tianwei
+            temp_dict=dict()
+            temp_dict[key] = {"distance":distance,'time':time}
+            hh = json.dumps(temp_dict, indent=3, ensure_ascii=False)
+            f.write(hh)
+            # ll.append(temp_dict)
+
+            # ll[key].append('distance':distance)
+            # dict[key]
+            # print(temp_dict)
+            # print(str(i)+'---'+str(i_i))
+
+
+# hh = json.dumps(ll, indent=3, ensure_ascii=False)
+# with open('route_25.json', 'w') as f:
+#     f.write(hh)
 # for i in content:
 
 
