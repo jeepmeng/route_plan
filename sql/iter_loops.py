@@ -41,7 +41,7 @@ def best_map_speed(start,*args,strategy=0,end=['125.325504,43.928104']):
     :return: 最佳速度优先导航路线
     """
 
-    parameters = {'key': '73b8604da9e3019fa8334d0815532879',  # 高德Key
+    parameters = {'key': 'f2cf4601a4c44261d4e62e77a6b0a0e7',  # 高德Key
                   'origin': start,
                   'destination': end,
                   'waypoints': args,
