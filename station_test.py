@@ -9,7 +9,7 @@ def get_station(addr):  # addr->地名
         'location': addr,
         'types':'150700',
         'radius':'800',
-        'offset':'10'
+        'offset':'1'
         # 'city': '长春市'
         # 'destination': addr2,
     }  # 地址参数
@@ -37,5 +37,6 @@ def get_station(addr):  # addr->地名
     #     return result['geocodes'][0]['location']
 
 
+if __name__ == '__main__':
 
-print(get_station('125.319229,43.926578'))
+    print(get_station('125.319229,43.926578'))
