@@ -30,7 +30,7 @@ def get_list_name(list,dict=new_dict):
     for i in list:
         tt.append(dict[i])
 
-    return tt
+    return ','.join(tt)
 
 def best_map_speed(start,*args,strategy=0,end=['125.325504,43.928104']):
     """
@@ -50,7 +50,7 @@ def best_map_speed(start,*args,strategy=0,end=['125.325504,43.928104']):
     url = 'https://restapi.amap.com/v3/direction/driving?'  # 高德地图地理编码API服务地址
     result = requests.get(url, parameters)  # GET方式请求
     result = result.json()
-    print(result)
+    # print(result)
     lon_lat = result["route"]["paths"][0]["distance"]
     # print(result)
     time=0
@@ -69,6 +69,7 @@ def permutation(li,num):
 
 ll = []
 with open('route_25.json', 'w') as f:
+    f.write('[\n')
     for k,i in enumerate(content):
         listss = copy.deepcopy(content)
         # print(k)
@@ -81,7 +82,7 @@ with open('route_25.json', 'w') as f:
         # listss = copy.deepcopy(lists1)
         # listss.pop(0)
         # lists1
-        temp = permutation(listss,5)
+        temp = permutation(listss,6)
         # print(temp)
         for i_i in temp:
             temp_wey_points=''
@@ -91,21 +92,22 @@ with open('route_25.json', 'w') as f:
                     temp_wey_points = temp_wey_points+str(wp)+';'
                 elif enu==temp_wey_points_len-1:
                     temp_wey_points = temp_wey_points+str(wp)
-            print(temp_wey_points)
+            print('temp_wey_points--------------',temp_wey_points)
 
 
 
 
             tianwei,time = best_map_speed(i,[temp_wey_points])
 
-            key = new_dict[i]+str(get_list_name(i_i))
+            key = new_dict[i]+','+str(get_list_name(i_i))
             distance = tianwei
             temp_dict=dict()
             temp_dict[key] = {"distance":distance,'time':time}
             hh = json.dumps(temp_dict, indent=3, ensure_ascii=False)
-            f.write(hh)
-            print(temp_dict)
-
+            # f.write(hh + ',')
+            f.write(hh+',\n')
+            print('temp_dict------------',temp_dict)
+    f.write('\n]')
 
 # hh = json.dumps(ll, indent=3, ensure_ascii=False)
 # with open('route_25.json', 'w') as f:
