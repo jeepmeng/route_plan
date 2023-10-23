@@ -31,7 +31,7 @@ def get_station_name(addr):  # addr->地名
 
 
 ll = []
-with open('./station_5_25.json', 'r') as f:
+with open('./station_5_35.json', 'r') as f:
     content = f.read()
     content = json.loads(content)
 
@@ -42,5 +42,5 @@ for i in content:
 print(ll)
 
 hh = json.dumps(ll, indent=3, ensure_ascii=False)
-with open('st_name_sq_60.json', 'w') as f:
+with open('st_name_sq_35.json', 'w') as f:
     f.write(hh)
